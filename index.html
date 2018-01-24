@@ -182,7 +182,7 @@
 				var time = Date.now() * 0.00005;
 				//optional: moving around mouse changes the camera animation
 				//camera.position.x += ( mouseX - camera.position.x ) * 0.05;
-				camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
+				camera.position.y += ( - mouseY - camera.position.y ) * 0.03;
 				//camera.lookAt( scene.position );
 				h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
 				sphereMaterial.color.setHSL( h, 0.5, 0.5 );

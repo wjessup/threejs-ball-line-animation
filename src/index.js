@@ -24,6 +24,8 @@ const SPHERES = 100
 const MAX_CONNECT_DISTANCE = 400
 const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
+const MAX_X_LIMIT = 2000
+const MAX_Y_LIMIT = 2000
 
 let myReq,
   camera,
@@ -36,7 +38,9 @@ let myReq,
     color: false,
     x: false,
     y: false,
-  }
+  },
+  movementX = 0.5,
+  movementY = 0.5
 
 const addSpheres = (howMany, diameter) => {
   for (let i = 0; i < howMany; i++) {
@@ -104,12 +108,22 @@ const init = ({
   renderer.setClearColor(0x000000, 0)
 }
 
+
 const render = () => {
   //optional: moving around mouse changes the camera animation
-  //camera.position.x += ( mouseX - camera.position.x ) * 0.05
-  //camera.position.y += ( - mouseY - camera.position.y ) * 0.03
-  //camera.position.x = camera.position.x + 1
-  //camera.lookAt( scene.position )
+  if (animations.y) {
+    camera.position.y += movementY
+    if (camera.position.y > MAX_Y_LIMIT || camera.position.y < -MAX_Y_LIMIT) {
+      movementY = -movementY
+    }
+  }
+  if (animations.x) {
+    camera.position.x += movementX
+    if (camera.position.x > MAX_X_LIMIT || camera.position.x < -MAX_X_LIMIT) {
+      movementX = -movementX
+    }
+  }
+  camera.lookAt( scene.position )
   if (animations.color) {
     const time = Date.now() * 0.00005
     const h = ( 360 * ( 1.0 + time ) % 360 ) / 360
@@ -137,12 +151,16 @@ export default class extends Component {
       animateColor = false,
       animateX = false,
       animateY = false,
+      moveX = 0.5,
+      moveY = 0.5
     } = this.props
     animations = {
       color: animateColor,
       x: animateX,
       y: animateY
     }
+    movementX = moveX
+    movementY = moveY
     init({
       container: this.container,
       howMany,

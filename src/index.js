@@ -21,6 +21,7 @@ import {
 
 const MAX_CONNECT_LINES = 4
 const NUM_SPHERES = 100
+const CONNECT_DISTANCE = 400
 const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
 
@@ -49,7 +50,7 @@ const addSpheres = (howMany) => {
   scene.add(spheres)
 }
 
-const init = ({ container, howMany }) => {
+const init = ({ container, howMany, maxConnectDistance }) => {
 
   camera.position.z = 1000
 
@@ -59,7 +60,7 @@ const init = ({ container, howMany }) => {
 
   for (var i = 0; i < spheres.children.length; i++) {
     let obj = spheres.children[i]
-    let near = getNearbyObjectsFor(obj, spheres)
+    let near = getNearbyObjectsFor(obj, spheres, maxConnectDistance)
 
     if (near.length == 0) continue
 
@@ -110,10 +111,14 @@ const animate = () => {
 export default class extends Component {
 
   componentDidMount() {
-    const { howMany=NUM_SPHERES } = this.props
+    const {
+      howMany = NUM_SPHERES,
+      maxConnectDistance = CONNECT_DISTANCE,
+    } = this.props
     init({
       container: this.container,
       howMany,
+      maxConnectDistance,
     })
     animate()
   }

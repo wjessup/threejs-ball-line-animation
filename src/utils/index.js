@@ -1,7 +1,5 @@
 import { Color } from 'three'
 
-const CONNECT_DISTANCE = 400
-
 export const hue2rgb = ( p, q, t ) => {
   if ( t < 0 ) t += 1;
   if ( t > 1 ) t -= 1;
@@ -30,13 +28,13 @@ export const setHSL = ( h, s, l ) => {
   return new Color(r,g,b);
 }
 
-export const getNearbyObjectsFor = (obj, group) => {
+export const getNearbyObjectsFor = (obj, group, maxConnectDistance) => {
   let objs = []
   for (var j = 0; j < group.children.length; j++) {
     if (obj.uuid == group.children[j].uuid) continue
 
     var dist = obj.position.distanceTo(group.children[j].position)
-    if (dist < CONNECT_DISTANCE) {
+    if (dist < maxConnectDistance) {
       objs.push(group.children[j])
     }
   }

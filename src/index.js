@@ -59,26 +59,20 @@ const init = ({ container, howMany, diameter,  maxConnectDistance }) => {
   addSpheres(howMany, diameter)
 
   for (let i = 0; i < spheres.children.length; i++) {
-    let obj = spheres.children[i]
-    let near = getNearbyObjectsFor(obj, spheres, maxConnectDistance)
+    const obj = spheres.children[i]
+    const near = getNearbyObjectsFor(obj, spheres, maxConnectDistance)
 
     if (near.length == 0) continue
 
     let lines = Math.floor(MAX_CONNECT_LINES * Math.random())
     for (let k = 0; k < near.length && k <= lines; k++) {
-      var lineGeometry = new Geometry()
-      lineGeometry.vertices.push(
-        new Vector3(obj.position.x, obj.position.y, obj.position.z),
-      )
-      lineGeometry.vertices.push(
-        new Vector3(near[k].position.x, near[k].position.y, near[k].position.z),
-      )
-
+      const lineGeometry = new Geometry()
+      lineGeometry.vertices.push(new Vector3(obj.position.x, obj.position.y, obj.position.z))
+      lineGeometry.vertices.push(new Vector3(near[k].position.x, near[k].position.y, near[k].position.z))
       const g = new MeshLine()
       g.setGeometry(lineGeometry)
       g.verticesNeedUpdate = true
       const mesh = new Mesh(g.geometry, lineMaterial)
-
       scene.add(mesh)
     }
   }
@@ -129,6 +123,12 @@ export default class extends Component {
   }
 
   render() {
-    return <div ref={c => this.container = c} style={{ width: '100%', height: '100%' }} />
+    return <div
+      ref={c => this.container = c}
+      style={{
+        width: '100%',
+        height: '100%',
+      }}
+    />
   }
 }

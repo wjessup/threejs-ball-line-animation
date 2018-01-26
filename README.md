@@ -7,6 +7,9 @@ Custom component with spheres connected to each other. Can be used for backgroun
 - Component takes up all the space available from parent container.
 - Canvas has a transparent background
 
+[Demo](https://aquigorka.com/threejs-ball-line-animation/)
+
+
 ## Custom attributes
 
 - numSpheres: number of spheres to draw (default: 100)

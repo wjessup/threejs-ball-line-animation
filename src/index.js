@@ -31,7 +31,12 @@ let myReq,
   renderer,
   sphereMaterial,
   spheres,
-  lineMaterial
+  lineMaterial,
+  animations = {
+    color: false,
+    x: false,
+    y: false,
+  }
 
 const addSpheres = (howMany, diameter) => {
   for (let i = 0; i < howMany; i++) {
@@ -100,21 +105,23 @@ const init = ({
 }
 
 const render = () => {
-  const time = Date.now() * 0.00005;
   //optional: moving around mouse changes the camera animation
-  //camera.position.x += ( mouseX - camera.position.x ) * 0.05;
-  //camera.position.y += ( - mouseY - camera.position.y ) * 0.03;
+  //camera.position.x += ( mouseX - camera.position.x ) * 0.05
+  //camera.position.y += ( - mouseY - camera.position.y ) * 0.03
   //camera.position.x = camera.position.x + 1
-  //camera.lookAt( scene.position );
-  const h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
-  sphereMaterial.color.setHSL( h, 0.5, 0.5 );
-  lineMaterial.uniforms.color.value = setHSL(h, 0.5, 0.5)
+  //camera.lookAt( scene.position )
+  if (animations.color) {
+    const time = Date.now() * 0.00005
+    const h = ( 360 * ( 1.0 + time ) % 360 ) / 360
+    sphereMaterial.color.setHSL( h, 0.5, 0.5 )
+    lineMaterial.uniforms.color.value = setHSL(h, 0.5, 0.5)
+  }
 
-  renderer.render( scene, camera );
+  renderer.render(scene, camera)
 }
 
 const animate = () => {
-  myReq = window.requestAnimationFrame(animate);
+  myReq = window.requestAnimationFrame(animate)
   render()
 }
 
@@ -127,7 +134,15 @@ export default class extends Component {
       maxConnectDistance = MAX_CONNECT_DISTANCE,
       maxConnectLines = MAX_CONNECT_LINES,
       lineWidth = LINE_WIDTH,
+      animateColor = false,
+      animateX = false,
+      animateY = false,
     } = this.props
+    animations = {
+      color: animateColor,
+      x: animateX,
+      y: animateY
+    }
     init({
       container: this.container,
       howMany,

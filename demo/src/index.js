@@ -10,8 +10,9 @@ class Demo extends Component {
         <div style={{
             border: '1px dashed #000',
             width: '50%',
-            height: '400px',
+            height: '500px',
             padding: '1em',
+            boxSizing: 'border-box',
           }}
         >
           <Example/>

@@ -20,26 +20,25 @@ import {
 } from './utils'
 
 const MAX_CONNECT_LINES = 4
-const NUM_SPHERES = 100
-const CONNECT_DISTANCE = 400
+const SPHERES = 100
+const MAX_CONNECT_DISTANCE = 400
 const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
 
-let myReq
-
+const camera = new PerspectiveCamera(55, window.innerWidth / window.innerHeight, 2,3000)
+camera.position.z = 1000
+const scene = new Scene()
+scene.fog = new FogExp2(0x000000, 0.0006)
 const renderer = new WebGLRenderer();
 const sphereMaterial = new MeshBasicMaterial({ color: new Color('purple') })
-const camera = new PerspectiveCamera(55, window.innerWidth / window.innerHeight, 2,3000)
-const scene = new Scene()
 const spheres = new Group()
-const lineMaterial = new MeshLineMaterial({
-  lineWidth: LINE_WIDTH,
-  color: new Color('purple'),
-})
 
-const addSpheres = (howMany) => {
+let myReq
+let lineMaterial
+
+const addSpheres = (howMany, diameter) => {
   for (var i = 0; i < howMany; i++) {
-    var geometry = new SphereGeometry(SPHERE_DIAMETER, 32, 32)
+    var geometry = new SphereGeometry(diameter, 32, 32)
     var sphere = new Mesh(geometry, sphereMaterial)
 
     sphere.position.x = 2000 * Math.random() - 1000
@@ -50,22 +49,23 @@ const addSpheres = (howMany) => {
   scene.add(spheres)
 }
 
-const init = ({ container, howMany, maxConnectDistance }) => {
+const init = ({ container, howMany, diameter,  maxConnectDistance }) => {
 
-  camera.position.z = 1000
+  lineMaterial = new MeshLineMaterial({
+    lineWidth: LINE_WIDTH,
+    color: new Color('purple'),
+  })
 
-  scene.fog = new FogExp2(0x000000, 0.0006)
+  addSpheres(howMany, diameter)
 
-  addSpheres(howMany)
-
-  for (var i = 0; i < spheres.children.length; i++) {
+  for (let i = 0; i < spheres.children.length; i++) {
     let obj = spheres.children[i]
     let near = getNearbyObjectsFor(obj, spheres, maxConnectDistance)
 
     if (near.length == 0) continue
 
     let lines = Math.floor(MAX_CONNECT_LINES * Math.random())
-    for (var k = 0; k < near.length && k <= lines; k++) {
+    for (let k = 0; k < near.length && k <= lines; k++) {
       var lineGeometry = new Geometry()
       lineGeometry.vertices.push(
         new Vector3(obj.position.x, obj.position.y, obj.position.z),
@@ -74,19 +74,18 @@ const init = ({ container, howMany, maxConnectDistance }) => {
         new Vector3(near[k].position.x, near[k].position.y, near[k].position.z),
       )
 
-      var g = new MeshLine()
+      const g = new MeshLine()
       g.setGeometry(lineGeometry)
       g.verticesNeedUpdate = true
-      var mesh = new Mesh(g.geometry, lineMaterial)
+      const mesh = new Mesh(g.geometry, lineMaterial)
 
       scene.add(mesh)
     }
   }
 
-  renderer.setPixelRatio( window.devicePixelRatio );
-  //renderer.setSize( window.innerWidth, window.innerHeight );
-  renderer.setSize(400, 400)
-  container.appendChild( renderer.domElement );
+  renderer.setPixelRatio( window.devicePixelRatio )
+  renderer.setSize(container.offsetWidth, container.offsetHeight)
+  container.appendChild(renderer.domElement)
 }
 
 const render = () => {
@@ -112,12 +111,14 @@ export default class extends Component {
 
   componentDidMount() {
     const {
-      howMany = NUM_SPHERES,
-      maxConnectDistance = CONNECT_DISTANCE,
+      howMany = SPHERES,
+      diameter = SPHERE_DIAMETER,
+      maxConnectDistance = MAX_CONNECT_DISTANCE,
     } = this.props
     init({
       container: this.container,
       howMany,
+      diameter,
       maxConnectDistance,
     })
     animate()
@@ -128,6 +129,6 @@ export default class extends Component {
   }
 
   render() {
-    return <div ref={c => this.container = c} />
+    return <div ref={c => this.container = c} style={{ width: '100%', height: '100%' }} />
   }
 }

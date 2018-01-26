@@ -1,6 +1,11 @@
-# Threejs ball ne animation
+# Threejs ball line animation
+
+![Demo GIF](/static/gif.gif)
 
 Custom component with spheres connected to each other. Can be used for background animations.
+
+- Component takes up all the space available from parent container.
+- Canvas has a transparent background
 
 ## Custom attributes
 

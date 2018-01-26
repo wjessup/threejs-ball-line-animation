@@ -88,12 +88,15 @@ const init = ({
   camera = new PerspectiveCamera(55, container.offsetWidth / container.offsetHeight, 2, 3000)
   camera.position.z = 1000
 
-  renderer = new WebGLRenderer();
+  renderer = new WebGLRenderer({
+    canvas: container,
+    preserveDrawingBuffer: true,
+    alpha: true,
+    antialias: true,
+  })
   renderer.setPixelRatio( window.devicePixelRatio )
   renderer.setSize(container.offsetWidth, container.offsetHeight)
   renderer.setClearColor(0x000000, 0)
-
-  container.appendChild(renderer.domElement)
 }
 
 const render = () => {
@@ -141,7 +144,7 @@ export default class extends Component {
   }
 
   render() {
-    return <div
+    return <canvas
       ref={c => this.container = c}
       style={{
         width: '100%',

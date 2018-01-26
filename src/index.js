@@ -25,22 +25,18 @@ const MAX_CONNECT_DISTANCE = 400
 const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
 
-const camera = new PerspectiveCamera(55, window.innerWidth / window.innerHeight, 2,3000)
-camera.position.z = 1000
-const scene = new Scene()
-scene.fog = new FogExp2(0x000000, 0.0006)
-const renderer = new WebGLRenderer();
-const sphereMaterial = new MeshBasicMaterial({ color: new Color('purple') })
-const spheres = new Group()
-
-let myReq
-let lineMaterial
+let myReq,
+  camera,
+  scene,
+  renderer,
+  sphereMaterial,
+  spheres,
+  lineMaterial
 
 const addSpheres = (howMany, diameter) => {
-  for (var i = 0; i < howMany; i++) {
-    var geometry = new SphereGeometry(diameter, 32, 32)
-    var sphere = new Mesh(geometry, sphereMaterial)
-
+  for (let i = 0; i < howMany; i++) {
+    const geometry = new SphereGeometry(diameter, 32, 32)
+    const sphere = new Mesh(geometry, sphereMaterial)
     sphere.position.x = 2000 * Math.random() - 1000
     sphere.position.y = 2000 * Math.random() - 1000
     sphere.position.z = 2000 * Math.random() - 1000
@@ -54,8 +50,14 @@ const init = ({
   howMany,
   diameter,
   maxConnectDistance,
-  lineWidth
+  maxConnectLines,
+  lineWidth,
 }) => {
+  scene = new Scene()
+  scene.fog = new FogExp2(0x000000, 0.0006)
+
+  sphereMaterial = new MeshBasicMaterial({ color: new Color('purple') })
+  spheres = new Group()
 
   lineMaterial = new MeshLineMaterial({
     lineWidth,
@@ -70,7 +72,7 @@ const init = ({
 
     if (near.length == 0) continue
 
-    let lines = Math.floor(MAX_CONNECT_LINES * Math.random())
+    let lines = Math.floor(maxConnectLines * Math.random())
     for (let k = 0; k < near.length && k <= lines; k++) {
       const lineGeometry = new Geometry()
       lineGeometry.vertices.push(new Vector3(obj.position.x, obj.position.y, obj.position.z))
@@ -83,8 +85,14 @@ const init = ({
     }
   }
 
+  camera = new PerspectiveCamera(55, container.offsetWidth / container.offsetHeight, 2, 3000)
+  camera.position.z = 1000
+
+  renderer = new WebGLRenderer();
   renderer.setPixelRatio( window.devicePixelRatio )
   renderer.setSize(container.offsetWidth, container.offsetHeight)
+  renderer.setClearColor(0x000000, 0)
+
   container.appendChild(renderer.domElement)
 }
 
@@ -114,6 +122,7 @@ export default class extends Component {
       howMany = SPHERES,
       diameter = SPHERE_DIAMETER,
       maxConnectDistance = MAX_CONNECT_DISTANCE,
+      maxConnectLines = MAX_CONNECT_LINES,
       lineWidth = LINE_WIDTH,
     } = this.props
     init({
@@ -121,6 +130,7 @@ export default class extends Component {
       howMany,
       diameter,
       maxConnectDistance,
+      maxConnectLines,
       lineWidth,
     })
     animate()

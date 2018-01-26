@@ -24,6 +24,8 @@ const NUM_SPHERES = 100
 const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
 
+let myReq
+
 const renderer = new WebGLRenderer();
 const sphereMaterial = new MeshBasicMaterial({ color: new Color('purple') })
 const camera = new PerspectiveCamera(55, window.innerWidth / window.innerHeight, 2,3000)
@@ -34,8 +36,8 @@ const lineMaterial = new MeshLineMaterial({
   color: new Color('purple'),
 })
 
-const addSpheres = () => {
-  for (var i = 0; i < NUM_SPHERES; i++) {
+const addSpheres = (howMany) => {
+  for (var i = 0; i < howMany; i++) {
     var geometry = new SphereGeometry(SPHERE_DIAMETER, 32, 32)
     var sphere = new Mesh(geometry, sphereMaterial)
 
@@ -47,13 +49,13 @@ const addSpheres = () => {
   scene.add(spheres)
 }
 
-const init = container => {
+const init = ({ container, howMany }) => {
 
   camera.position.z = 1000
 
   scene.fog = new FogExp2(0x000000, 0.0006)
 
-  addSpheres()
+  addSpheres(howMany)
 
   for (var i = 0; i < spheres.children.length; i++) {
     let obj = spheres.children[i]
@@ -101,20 +103,26 @@ const render = () => {
 }
 
 const animate = () => {
-  requestAnimationFrame(animate)
+  myReq = window.requestAnimationFrame(animate);
   render()
 }
 
 export default class extends Component {
 
   componentDidMount() {
-    init(this.container)
+    const { howMany=NUM_SPHERES } = this.props
+    init({
+      container: this.container,
+      howMany,
+    })
     animate()
   }
 
+  componentWillUnmount() {
+    window.cancelAnimationFrame(myReq)
+  }
+
   render() {
-    return (
-      <div ref={c => this.container = c} />
-    )
+    return <div ref={c => this.container = c} />
   }
 }

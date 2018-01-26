@@ -49,10 +49,16 @@ const addSpheres = (howMany, diameter) => {
   scene.add(spheres)
 }
 
-const init = ({ container, howMany, diameter,  maxConnectDistance }) => {
+const init = ({
+  container,
+  howMany,
+  diameter,
+  maxConnectDistance,
+  lineWidth
+}) => {
 
   lineMaterial = new MeshLineMaterial({
-    lineWidth: LINE_WIDTH,
+    lineWidth,
     color: new Color('purple'),
   })
 
@@ -108,12 +114,14 @@ export default class extends Component {
       howMany = SPHERES,
       diameter = SPHERE_DIAMETER,
       maxConnectDistance = MAX_CONNECT_DISTANCE,
+      lineWidth = LINE_WIDTH,
     } = this.props
     init({
       container: this.container,
       howMany,
       diameter,
       maxConnectDistance,
+      lineWidth,
     })
     animate()
   }

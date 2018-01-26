@@ -20,7 +20,7 @@ import {
 } from './utils'
 
 const MAX_CONNECT_LINES = 4
-const SPHERES = 100
+const NUM_SPHERES = 100
 const MAX_CONNECT_DISTANCE = 400
 const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
@@ -46,8 +46,8 @@ let myReq,
     y: DEFAULT_MOVEMENT,
   }
 
-const addSpheres = (howMany, diameter) => {
-  for (let i = 0; i < howMany; i++) {
+const addSpheres = (numSpheres, diameter) => {
+  for (let i = 0; i < numSpheres; i++) {
     const geometry = new SphereGeometry(diameter, 32, 32)
     const sphere = new Mesh(geometry, sphereMaterial)
     sphere.position.x = 2000 * Math.random() - 1000
@@ -60,7 +60,7 @@ const addSpheres = (howMany, diameter) => {
 
 const init = ({
   container,
-  howMany,
+  numSpheres,
   diameter,
   maxConnectDistance,
   maxConnectLines,
@@ -79,7 +79,7 @@ const init = ({
     color: new Color(lineColor),
   })
 
-  addSpheres(howMany, diameter)
+  addSpheres(numSpheres, diameter)
 
   for (let i = 0; i < spheres.children.length; i++) {
     const obj = spheres.children[i]
@@ -148,7 +148,7 @@ export default class extends Component {
 
   componentDidMount() {
     const {
-      howMany = SPHERES,
+      numSpheres = NUM_SPHERES,
       diameter = SPHERE_DIAMETER,
       maxConnectDistance = MAX_CONNECT_DISTANCE,
       maxConnectLines = MAX_CONNECT_LINES,
@@ -172,7 +172,7 @@ export default class extends Component {
     }
     init({
       container: this.container,
-      howMany,
+      numSpheres,
       diameter,
       maxConnectDistance,
       maxConnectLines,

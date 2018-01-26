@@ -29,6 +29,21 @@ class Demo extends Component {
           />
         </div>
       </div>
+    <h2>Custom attributes</h2>
+    <ul>
+      <li>numSpheres: number of spheres to draw (default: 100)</li>
+      <li>diameter: sphere diameter (default: 40)</li>
+      <li>maxConnectDistance: if distances between spheres is less than this value a line will get drawn (defaul: 400)</li>
+      <li>maxConnectLines: maximum number of lines from each sphere (default: 4)</li>
+      <li>lineWidth: width of lines connecting spheres (default: 8)</li>
+      <li>animateColor: whether or not the colors should change (default: false)</li>
+      <li>animateX: animate over the x-axis (default: false)</li>
+      <li>animateY: animate over the y-axis (default: false)</li>
+      <li>moveX: speed at which animation over x-axis changes (default: 0.5)</li>
+      <li>moveY: speed at which animation over y-axis changes (default: 0.5)</li>
+      <li>sphereColor: initial color for spheres (default: #800080 - purple)</li>
+      <li>lineolor: initial color for lines between spheres (default: #800080 - purple)</li>
+    </ul>
     </div>
   }
 }

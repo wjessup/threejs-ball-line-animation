@@ -23,7 +23,10 @@ class Demo extends Component {
             height: '100%'
           }}
         >
-          <ThreejsBallLineAnimation animateColor animateX />
+          <ThreejsBallLineAnimation
+            animateColor
+            animateX
+          />
         </div>
       </div>
     </div>

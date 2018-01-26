@@ -26,6 +26,8 @@ const SPHERE_DIAMETER = 40
 const LINE_WIDTH = 8
 const MAX_X_LIMIT = 2000
 const MAX_Y_LIMIT = 2000
+const DEFAULT_COLOR = '#800080'
+const DEFAULT_MOVEMENT = 0.5
 
 let myReq,
   camera,
@@ -39,8 +41,10 @@ let myReq,
     x: false,
     y: false,
   },
-  movementX = 0.5,
-  movementY = 0.5
+  movement = {
+    x: DEFAULT_MOVEMENT,
+    y: DEFAULT_MOVEMENT,
+  }
 
 const addSpheres = (howMany, diameter) => {
   for (let i = 0; i < howMany; i++) {
@@ -61,16 +65,18 @@ const init = ({
   maxConnectDistance,
   maxConnectLines,
   lineWidth,
+  sphereColor,
+  lineColor,
 }) => {
   scene = new Scene()
   scene.fog = new FogExp2(0x000000, 0.0006)
 
-  sphereMaterial = new MeshBasicMaterial({ color: new Color('purple') })
+  sphereMaterial = new MeshBasicMaterial({ color: new Color(sphereColor) })
   spheres = new Group()
 
   lineMaterial = new MeshLineMaterial({
     lineWidth,
-    color: new Color('purple'),
+    color: new Color(lineColor),
   })
 
   addSpheres(howMany, diameter)
@@ -110,20 +116,19 @@ const init = ({
 
 
 const render = () => {
-  //optional: moving around mouse changes the camera animation
   if (animations.y) {
-    camera.position.y += movementY
+    camera.position.y += movement.y
     if (camera.position.y > MAX_Y_LIMIT || camera.position.y < -MAX_Y_LIMIT) {
-      movementY = -movementY
+      movement.y = -movement.y
     }
   }
   if (animations.x) {
-    camera.position.x += movementX
+    camera.position.x += movement.x
     if (camera.position.x > MAX_X_LIMIT || camera.position.x < -MAX_X_LIMIT) {
-      movementX = -movementX
+      movement.x = -movement.x
     }
   }
-  camera.lookAt( scene.position )
+  camera.lookAt(scene.position)
   if (animations.color) {
     const time = Date.now() * 0.00005
     const h = ( 360 * ( 1.0 + time ) % 360 ) / 360
@@ -151,16 +156,20 @@ export default class extends Component {
       animateColor = false,
       animateX = false,
       animateY = false,
-      moveX = 0.5,
-      moveY = 0.5
+      moveX = DEFAULT_MOVEMENT,
+      moveY = DEFAULT_MOVEMENT,
+      sphereColor = DEFAULT_COLOR,
+      lineColor = DEFAULT_COLOR,
     } = this.props
     animations = {
       color: animateColor,
       x: animateX,
-      y: animateY
+      y: animateY,
     }
-    movementX = moveX
-    movementY = moveY
+    movement = {
+      x: moveX,
+      y: moveY,
+    }
     init({
       container: this.container,
       howMany,
@@ -168,6 +177,8 @@ export default class extends Component {
       maxConnectDistance,
       maxConnectLines,
       lineWidth,
+      sphereColor,
+      lineColor,
     })
     animate()
   }
